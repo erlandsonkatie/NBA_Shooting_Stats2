@@ -1,0 +1,32 @@
+---
+title: "Midterm Project"
+author: "Katie Erlandson"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("devtools")
+install.packages("dplyr")
+```
+
+```{r}
+library(devtools)
+library(dplyr)
+library(tidyverse)
+```
+
+```{r}
+devtools::install_github("abresler/nbastatR")
+
+library(nbastatR)
+```
+
+```{r}
+```
