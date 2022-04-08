@@ -1,0 +1,13 @@
+---
+title: "Midterm Offical Report"
+author: "Katie Erlandson"
+date: "4/8/2022"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+![courts](/STAT 345/Projects/2000)
+

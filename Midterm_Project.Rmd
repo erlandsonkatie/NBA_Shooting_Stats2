@@ -12,21 +12,93 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-install.packages("devtools")
-install.packages("dplyr")
-```
-
-```{r}
-library(devtools)
+library(ggplot2)
 library(dplyr)
 library(tidyverse)
+library(grid)
+library(gganimate)
+library(gifski)
+library(sportyR)
 ```
 
 ```{r}
-devtools::install_github("abresler/nbastatR")
+#uploading nbastatR package so I am able to use it.  
+Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 *2)
 
-library(nbastatR)
+if(!require('nbastatR')) {
+  install.packages('nbastatR')
+  library('nbastatR')
+}
+#finding all the data I want to use, for some reason its not letting me do multiple years in one line of code, so I am doing it manually. This data is 2000-2018
+shotdata18 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2018)
+shotdata17 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2017)
+shotdata16 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2016)
+shotdata15 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2015)
+shotdata14 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2014)
+shotdata13 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2013)
+shotdata12 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2012)
+shotdata11 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2011)
+shotdata10 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2010)
+shotdata09 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2009)
+shotdata08 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2008)
+shotdata07 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2007)
+shotdata06 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2006)
+shotdata05 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2005)
+shotdata04 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2004)
+shotdata03 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2003)
+shotdata02 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2002)
+shotdata01 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2001)
+shotdata00 <- nbastatR::teams_shots(teams = "Brooklyn Nets",seasons = 2000)
+```
+
+
+```{r}
+#Creating function to select data I need from each tibble. 
+dataFunction <- function(x) {
+  x %>% select(yearSeason, typeEvent, locationX, locationY)
+} 
 ```
 
 ```{r}
+library(grid)
+library(jpeg)
+library(RCurl)
+library(ggthemes)
+ 
+# Half court image. I found out how to do this by the internet. 
+courtImg.URL <- "https://thedatagame.files.wordpress.com/2016/03/nba_court.jpg"
+court <- rasterGrob(readJPEG(getURLContent(courtImg.URL)),
+           width=unit(1,"npc"), height=unit(1,"npc"))
+ 
+# Making function to plot using NBA court background and color/shape to say if shot was missed or not. I found out how to do this by the internet. 
+graphdata <- function(x,y) {
+  newdata <- dataFunction(x)
+  ggplot(data= newdata, aes(x=x$locationX, y=x$locationY)) + 
+      annotation_custom(court, -250, 250, -50, 420) +
+      geom_point(aes(color = typeEvent, shape = typeEvent)) +
+      xlim(-250, 250) +
+      ylim(-50, 420) + ggtitle(y) + xlab("Court Length") + ylab("Court Width") + scale_color_discrete("") + scale_shape_discrete("") + theme_tufte()
+}
+#Graphing the data, year by year.
+graphdata(shotdata00,"2000")
+graphdata(shotdata01,"2001")
+graphdata(shotdata02,"2002")
+graphdata(shotdata03,"2003")
+graphdata(shotdata04,"2004")
+graphdata(shotdata05,"2005")
+graphdata(shotdata06,"2006")
+graphdata(shotdata07,"2007")
+graphdata(shotdata08,"2008")
+graphdata(shotdata09,"2009")
+graphdata(shotdata10,"2010")
+graphdata(shotdata11,"2011")
+graphdata(shotdata12,"2012")
+graphdata(shotdata13,"2013")
+graphdata(shotdata14,"2014")
+graphdata(shotdata15,"2015")
+graphdata(shotdata16,"2016")
+graphdata(shotdata17,"2017")
+graphdata(shotdata18,"2018")
 ```
+
+
